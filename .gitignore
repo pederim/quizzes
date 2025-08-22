@@ -5,3 +5,4 @@ apps/**/dist/
 apps/**/.env
 .vscode/
 .DS_Store
+docker-compose.override.yml
