@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@9.0.0",
   "scripts": {
-    "postinstall": "pnpm -r install"
+    "postinstall": "if [ \"$VERCEL\" != \"1\" ]; then pnpm -r install; fi"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
