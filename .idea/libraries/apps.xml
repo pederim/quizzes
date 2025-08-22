@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="apps">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/apps/quizzes-web-dashboard-hotfix.zip!/" />
+      <root url="jar://$PROJECT_DIR$/apps/quizzes-web-entry-hotfix.zip!/" />
+      <root url="jar://$PROJECT_DIR$/apps/quizzes-web-patch.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

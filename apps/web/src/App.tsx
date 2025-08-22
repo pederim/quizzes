@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { api, setAuth, clearAuth } from './api'
 import './theme.css'
+
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Users from './pages/Users'
@@ -20,34 +21,78 @@ export function App() {
   }, [user])
 
   if (!user) {
-    return <Login onLogin={(data) => {
-      setAuth(data.data.accessToken, data.data.refreshToken, data.data.user)
-      setUser(data.data.user)
-    }} />
+    return (
+      <Login
+        onLogin={(data) => {
+          setAuth(data.data.accessToken, data.data.refreshToken, data.data.user)
+          setUser(data.data.user)
+        }}
+      />
+    )
   }
 
   return (
     <div>
-      <nav className="nav">
-        <strong>🎯 Quizzes</strong>
+      {/* Navbar com a marca do IFS */}
+      <nav
+        className="nav"
+        style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+      >
+        <img
+          src="/ifs-wordmark.svg"
+          alt="Instituto Federal de Sergipe"
+          style={{ height: 28 }}
+        />
+
         <button onClick={() => setPage('dashboard')}>Dashboard</button>
         <button onClick={() => setPage('quizzes')}>Quizzes</button>
-        {user.role === 'ADMIN' && <button onClick={() => setPage('users')}>Usuários</button>}
+        {user.role === 'ADMIN' && (
+          <button onClick={() => setPage('users')}>Usuários</button>
+        )}
+
         <div className="spacer" />
-        <div className="user">{user.name} ({user.role})</div>
-        <button onClick={() => { clearAuth(); setUser(null); }}>Sair</button>
+        <div className="user">
+          {user.name} ({user.role})
+        </div>
+        <button
+          onClick={() => {
+            clearAuth()
+            setUser(null)
+          }}
+        >
+          Sair
+        </button>
       </nav>
 
       <div className="container" style={{ paddingTop: 16 }}>
         {page === 'dashboard' && <Dashboard />}
+
         {page === 'users' && <Users />}
-        {page === 'quizzes' && <Quizzes
-          onView={(id) => { setSelectedQuiz(id); setPage('quizDetail'); }}
-          onEdit={(id) => { setSelectedQuiz(id); setPage('quizEdit'); }}
-          onNew={() => { setSelectedQuiz(null); setPage('quizEdit'); }}
-        />}
-        {page === 'quizDetail' && selectedQuiz && <QuizDetail id={selectedQuiz} />}
-        {page === 'quizEdit' && <QuizEdit id={selectedQuiz} onDone={() => setPage('quizzes')} />}
+
+        {page === 'quizzes' && (
+          <Quizzes
+            onView={(id) => {
+              setSelectedQuiz(id)
+              setPage('quizDetail')
+            }}
+            onEdit={(id) => {
+              setSelectedQuiz(id)
+              setPage('quizEdit')
+            }}
+            onNew={() => {
+              setSelectedQuiz(null)
+              setPage('quizEdit')
+            }}
+          />
+        )}
+
+        {page === 'quizDetail' && selectedQuiz && (
+          <QuizDetail id={selectedQuiz} />
+        )}
+
+        {page === 'quizEdit' && (
+          <QuizEdit id={selectedQuiz} onDone={() => setPage('quizzes')} />
+        )}
       </div>
     </div>
   )
