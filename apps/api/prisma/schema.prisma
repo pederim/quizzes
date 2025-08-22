@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  PROFESSOR
+  ALUNO
+}
+
+enum QuizStatus {
+  RASCUNHO
+  PUBLICADO
+}
+
+enum QuestionType {
+  MULTIPLA
+  VF
+  DISSERTATIVA
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  cpf          String?   @unique
+  phone        String?
+  passwordHash String
+  role         Role      @default(ALUNO)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  quizzes      Quiz[]
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Quiz {
+  id          Int         @id @default(autoincrement())
+  titulo      String
+  descricao   String?
+  categoria   String?
+  status      QuizStatus  @default(RASCUNHO)
+  autorId     Int
+  autor       User        @relation(fields: [autorId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  questoes    Question[]
+}
+
+model Question {
+  id              Int           @id @default(autoincrement())
+  quizId          Int
+  quiz            Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  enunciado       String
+  tipo            QuestionType
+  opcoes          Json?
+  respostaCorreta Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}

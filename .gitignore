@@ -1,0 +1,7 @@
+# Node/monorepo
+node_modules/
+apps/**/node_modules/
+apps/**/dist/
+apps/**/.env
+.vscode/
+.DS_Store
