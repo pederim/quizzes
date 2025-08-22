@@ -1,0 +1,74 @@
+name: quizzes
+services:
+  api:
+    build:
+      context: C:\Users\gugup\Downloads\quizzes\apps\api
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    environment:
+      CORS_ORIGIN: http://localhost:5173
+      DATABASE_URL: postgresql://neondb_owner:SEU_TOKEN_DO_NEON@ep-dawn-unit-ad1w2u56-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&pgbouncer=true&connection_limit=1
+      JWT_ACCESS_SECRET: super_access_secret_change_me
+      JWT_REFRESH_SECRET: NtrBkCWEEfs1iJhpvc+gMpL8u18H4hS5wJ03s5guptp6pVd5UTZtJVPQUqJbeSPOTXpWCGDIEh+bEP3yj5EJyw==
+      JWT_SECRET: teoy1zJkhiRJUqRLgCEDDr9TpL5IF8wf5phMwha8WtUPCNoZgdsEFc7/njbmZwF27ePQZkh3B7pI1u4iHiu8ag==
+      NODE_ENV: production
+      PORT: "4000"
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 4000
+        published: "4000"
+        protocol: tcp
+  db:
+    environment:
+      POSTGRES_DB: quizzes
+      POSTGRES_PASSWORD: quizpass
+      POSTGRES_USER: quizuser
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U quizuser -d quizzes || exit 1
+      timeout: 5s
+      interval: 5s
+      retries: 20
+    image: postgres:16
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5432
+        published: "5432"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/postgresql/data
+        volume: {}
+  web:
+    build:
+      context: C:\Users\gugup\Downloads\quizzes\apps\web
+      dockerfile: Dockerfile
+    depends_on:
+      api:
+        condition: service_started
+        required: true
+    environment:
+      VITE_API_URL: http://localhost:4000
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 5173
+        published: "5173"
+        protocol: tcp
+networks:
+  default:
+    name: quizzes_default
+volumes:
+  db_data:
+    name: quizzes_db_data

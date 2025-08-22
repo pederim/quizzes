@@ -1,0 +1,10 @@
+services:
+  api:
+    environment:
+      DATABASE_URL: "postgresql://neondb_owner:npg_A1h4MwtokKWu@ep-dawn-unit-ad1w2u56-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&pgbouncer=true&connection_limit=1"
+      NODE_ENV: "production"
+      JWT_SECRET: "teoy1zJkhiRJUqRLgCEDDr9TpL5IF8wf5phMwha8WtUPCNoZgdsEFc7/njbmZwF27ePQZkh3B7pI1u4iHiu8ag=="
+      JWT_REFRESH_SECRET: "NtrBkCWEEfs1iJhpvc+gMpL8u18H4hS5wJ03s5guptp6pVd5UTZtJVPQUqJbeSPOTXpWCGDIEh+bEP3yj5EJyw=="
+      # opcional: libere CORS para o(s) seu(s) front(s)
+      # CORS_ORIGIN: "http://localhost:5173,https://seu-frontend.vercel.app"
+
